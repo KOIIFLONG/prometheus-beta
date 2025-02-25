@@ -37,7 +37,11 @@ def find_closest_points(points_a: List[Tuple[float, float]],
             )
             
             # Update minimum distance if current distance is smaller
-            if distance < min_distance:
+            # If distances are equal, prefer points with smaller coordinate values
+            if (distance < min_distance or 
+                (distance == min_distance and 
+                 (point_a[0] + point_a[1] < closest_pair[0][0] + closest_pair[0][1] or
+                  point_b[0] + point_b[1] < closest_pair[1][0] + closest_pair[1][1]))):
                 min_distance = distance
                 closest_pair = (point_a, point_b)
     
