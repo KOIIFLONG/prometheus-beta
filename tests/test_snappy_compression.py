@@ -9,7 +9,7 @@ from snappy_compression import compress_data, decompress_data
 
 def test_compress_decompress_bytes():
     """Test compression and decompression with bytes"""
-    original_data = b'Hello, Snappy compression!'
+    original_data = b'Hello, Zstandard compression!'
     compressed = compress_data(original_data)
     assert compressed != original_data
     decompressed = decompress_data(compressed)
@@ -17,7 +17,7 @@ def test_compress_decompress_bytes():
 
 def test_compress_decompress_str():
     """Test compression and decompression with string"""
-    original_data = 'Hello, Snappy compression!'
+    original_data = 'Hello, Zstandard compression!'
     compressed = compress_data(original_data)
     assert compressed != original_data.encode('utf-8')
     decompressed = decompress_data(compressed)
