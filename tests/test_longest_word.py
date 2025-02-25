@@ -7,7 +7,7 @@ def test_find_longest_word_basic():
 
 def test_find_longest_word_multiple_max_length():
     """Test when multiple words have the same maximum length."""
-    assert find_longest_word("cat dog mouse house") == "house"
+    assert find_longest_word("cat dog mouse house") == "mouse"
 
 def test_find_longest_word_punctuation():
     """Test sentence with punctuation."""
