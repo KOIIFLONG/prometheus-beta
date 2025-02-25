@@ -26,12 +26,14 @@ def edmonds_karp_max_flow(graph: Dict[int, Dict[int, int]], source: int, sink: i
     if source not in graph or sink not in graph:
         raise ValueError("Source or sink node not in graph")
     
-    # Create a residual graph (deep copy to avoid modifying original)
-    residual_graph = {}
+    # Create a deep copy of the graph to use as the residual graph
+    def deep_copy_graph(g):
+        return {node: g[node].copy() for node in g}
+    
+    residual_graph = deep_copy_graph(graph)
+    
+    # Ensure reciprocal edges are initialized
     for node in graph:
-        residual_graph[node] = graph[node].copy()
-        
-        # Initialize reciprocal edges with 0 if not existing
         for neighbor in graph[node]:
             if neighbor not in residual_graph:
                 residual_graph[neighbor] = {}
@@ -45,11 +47,9 @@ def edmonds_karp_max_flow(graph: Dict[int, Dict[int, int]], source: int, sink: i
     while True:
         # Perform BFS to find an augmenting path
         parent = {}
-        min_capacity = {}
         visited = set()
         queue = deque([source])
         visited.add(source)
-        min_capacity[source] = float('inf')
         
         while queue:
             current = queue.popleft()
@@ -57,23 +57,35 @@ def edmonds_karp_max_flow(graph: Dict[int, Dict[int, int]], source: int, sink: i
             # Check neighbors
             for neighbor, capacity in residual_graph[current].items():
                 if neighbor not in visited and capacity > 0:
-                    # Update path flow
-                    path_flow = min(min_capacity[current], capacity)
-                    min_capacity[neighbor] = path_flow
                     parent[neighbor] = current
                     
                     # Found path to sink
                     if neighbor == sink:
-                        max_flow += path_flow
+                        # Find the minimum flow along the path
+                        path_flow = float('inf')
+                        v = sink
+                        while v != source:
+                            u = parent[v]
+                            path_flow = min(path_flow, residual_graph[u][v])
+                            v = u
                         
                         # Update residual graph
                         v = sink
                         while v != source:
                             u = parent[v]
                             residual_graph[u][v] -= path_flow
+                            
+                            # Ensure reverse edge exists before updating
+                            if u not in residual_graph[v]:
+                                residual_graph[v][u] = 0
                             residual_graph[v][u] += path_flow
+                            
                             v = u
                         
+                        # Add to max flow
+                        max_flow += path_flow
+                        
+                        # Stop BFS
                         queue.clear()
                         break
                     
