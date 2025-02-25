@@ -1,0 +1,48 @@
+def fibonacci(n: int, memo: dict = None) -> int:
+    """
+    Calculate the nth Fibonacci number using recursion with memoization.
+    
+    Args:
+        n (int): The position in the Fibonacci sequence (0-indexed).
+        memo (dict, optional): Memoization dictionary to cache previously 
+                               calculated Fibonacci numbers.
+    
+    Returns:
+        int: The nth Fibonacci number.
+    
+    Raises:
+        ValueError: If n is negative.
+        TypeError: If n is not an integer.
+    
+    Examples:
+        >>> fibonacci(0)
+        0
+        >>> fibonacci(1)
+        1
+        >>> fibonacci(5)
+        5
+    """
+    # Initialize memoization dictionary if not provided
+    if memo is None:
+        memo = {}
+    
+    # Type and value validation
+    if not isinstance(n, int):
+        raise TypeError("Input must be an integer")
+    
+    if n < 0:
+        raise ValueError("Input must be a non-negative integer")
+    
+    # Base cases
+    if n == 0:
+        return 0
+    if n == 1:
+        return 1
+    
+    # Check if result is already memoized
+    if n in memo:
+        return memo[n]
+    
+    # Recursive calculation with memoization
+    memo[n] = fibonacci(n-1, memo) + fibonacci(n-2, memo)
+    return memo[n]
