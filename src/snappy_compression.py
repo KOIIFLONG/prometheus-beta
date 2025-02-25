@@ -1,8 +1,8 @@
-import snappy
+import zstandard as zstd
 
 def compress_data(data):
     """
-    Compress input data using Snappy compression algorithm.
+    Compress input data using Zstandard compression algorithm.
 
     Args:
         data (bytes or str): The data to be compressed. 
@@ -27,15 +27,18 @@ def compress_data(data):
     if not data:
         raise ValueError("Input data cannot be empty")
     
-    # Compress using Snappy
-    return snappy.compress(data)
+    # Create compressor
+    cctx = zstd.ZstdCompressor()
+    
+    # Compress data
+    return cctx.compress(data)
 
 def decompress_data(compressed_data):
     """
-    Decompress data that was compressed with Snappy.
+    Decompress data that was compressed with Zstandard.
 
     Args:
-        compressed_data (bytes): The Snappy-compressed data to decompress
+        compressed_data (bytes): The compressed data to decompress
 
     Returns:
         bytes: Decompressed data
@@ -52,5 +55,8 @@ def decompress_data(compressed_data):
     if not compressed_data:
         raise ValueError("Input data cannot be empty")
     
-    # Decompress using Snappy
-    return snappy.decompress(compressed_data)
+    # Create decompressor
+    dctx = zstd.ZstdDecompressor()
+    
+    # Decompress data
+    return dctx.decompress(compressed_data)
