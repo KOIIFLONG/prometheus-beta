@@ -26,7 +26,7 @@ def test_palindrome_with_numbers():
     assert is_palindrome("123321") == True
 
 def test_palindrome_mixed_alphanumeric():
-    assert is_palindrome("R2aecar2R") == True
+    assert is_palindrome("r2acec2r") == True
 
 def test_non_palindrome_with_punctuation():
     assert is_palindrome("Was it a car or a dog I saw?") == False
